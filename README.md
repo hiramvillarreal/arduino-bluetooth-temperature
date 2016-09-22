@@ -1,8 +1,8 @@
-arduino-bluetooth-temperature
+Raspberry pi GUI sensor value
 =============================
 
-This is the code for the "Arduino Bluetooth Temperature & Humidity Sensor" article on the Open Home Automation website. The article is about using a Bluetooth module to measure temperature & humidity in your home right from your computer.
+The article is about using a Raspberry Pi and a sensormodule to measure humidity in your home right from your HDMI  display.
 
-You can find the article on the Open Home Automation website:
+You can find the article derivated from on the Open Home Automation website:
 
 http://www.openhomeautomation.net/arduino-bluetooth/

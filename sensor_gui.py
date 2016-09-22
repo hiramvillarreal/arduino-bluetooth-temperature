@@ -1,55 +1,41 @@
-# Graphical User Interface for the Bluetooth sensor
+#!/usr/bin/env python
+# Graphical User Interface for the DHT sensor
 
 # Imports
 import time
+import Adafruit_DHT
 import serial
 from Tkinter import *
+sensor = Adafruit_DHT.DHT11 #DHT11/DHT22/AM2302
+pin = 4
 
-# Serial port parameters
-#serial_speed = 115200
-#serial_port = '/dev/cu.AdafruitEZ-Link06d5-SPP'
-
-# Test with USB-Serial connection
-#serial_port = '/dev/tty.usbmodem1421'
-
-#ser = serial.Serial(serial_port, serial_speed, timeout=1)
-
-# Main Tkinter application
 class Application(Frame):
 
 	# Measure data from the sensor
 	def measure(self):
-
-		# Request data and read the answer
-#		ser.write("m")
-		#data = ser.readline()
-		data = ("32,33.4")
+                hum, temp = Adafruit_DHT.read_retry(sensor, pin)
+		data = (str(temp) + "," + str(hum))
 		# If the answer is not empty, process & display data
 		if (data != ""):
 			processed_data = data.split(",")
 
-
 			self.hum_data.set(str(processed_data[1]))
 			self.humidity.pack()
-			
 			
 			self.temp_data.set("% Humedad:" )
 			self.temperature.pack()
 
 		# Wait 1 second between each measurement
-		self.after(1000,self.measure)
+		self.after(10000,self.measure)
 
 	# Create display elements
 	def createWidgets(self):
 
-
-
-		
-		self.humidity = Label(self, textvariable=self.hum_data, font=('Verdana', 400, 'bold'))
+		self.humidity = Label(self, textvariable=self.hum_data, font=('Verdana', 230, 'bold'))
 		self.hum_data.set("Humidity")
 		self.humidity.pack()
 		
-		self.temperature = Label(self, textvariable=self.temp_data, font=('Verdana', 70, 'bold'))
+		self.temperature = Label(self, textvariable=self.temp_data, font=('Verdana', 40, 'bold'))
 		self.temp_data.set("Temperature")
 		self.temperature.pack()
 

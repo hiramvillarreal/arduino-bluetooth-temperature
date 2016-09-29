@@ -1,10 +1,11 @@
-#Humidity and Temperature Reader for Honeywell Sensors
+# Humidity and Temperature Reader for Honeywell Sensors
 # Graphical User Interface for the Honeywell humidity sensors HIH####
 
 # Imports
 import time
 import subprocess
 from Tkinter import *
+limit = 71 #limit to display a red background and yellow text to highlight a level warning on humidity level
 
 # Main Tkinter application
 class Application(Frame):
@@ -20,17 +21,23 @@ class Application(Frame):
 		if (data != ""):
 			processed_data = data.split(",")
 
-			self.hum_data.set(str(processed_data[0]))
-                        self.humidity.pack()
-
-                        self.label_data.set("% Humedad:")
+                        self.label_data.set( "% Humedad:")
                         self.label.pack()
+
+			self.hum_data.set(str(processed_data[0]))
+			#condition to set the humidity text and background color based oon "limit" variable
+			if (float(processed_data[0]) > limit):
+				self.humidity.configure(bg = 'red', foreground='yellow')
+			else:
+				color = "white"
+                                self.humidity.configure(bg = '#d9d9d9', foreground='black')
+                                self.humidity.pack()
 
                         self.temp_data.set("Temperatura: " + str(processed_data[1]) + " C")
                         self.temperature.pack()
                 
 		# Wait time in milliseconds between each measurement
-		self.after(30000,self.measure)
+		self.after(10000,self.measure)
 
 	# Create display elements
 	def createWidgets(self):
@@ -38,8 +45,7 @@ class Application(Frame):
                 self.label = Label(self, textvariable=self.label_data, font=('Verdana', 40, 'bold'))
                 self.label.pack()
 		
-		self.humidity = Label(self, textvariable=self.hum_data, background='red', foreground='yellow', font=('Verdana', 240, 'bold'))
-#                self.humidity = Label(self, textvariable=self.hum_data,  font=('Verdana', 240, 'bold'))
+                self.humidity = Label(self, textvariable=self.hum_data,  font=('Verdana', 240, 'bold'))
 		self.humidity.pack()                
 
                 self.temperature = Label(self, textvariable=self.temp_data, font=('Verdana', 30))

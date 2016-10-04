@@ -5,8 +5,8 @@
 import time
 import subprocess
 from Tkinter import *
-limit = 71 #limit to display a red background and yellow text to highlight a level warning on humidity level
-
+limit = 45  # Humidity porcentage limit to display a red background and yellow text label
+wait = 180000 # Wait time in milliseconds between each measurement
 # Main Tkinter application
 class Application(Frame):
 
@@ -21,34 +21,38 @@ class Application(Frame):
 		if (data != ""):
 			processed_data = data.split(",")
 
+			if (float(processed_data[0]) > 100): #Some times the sensor gives an error value  > 100 this reload the function until get a correct read			
+				self.after(wait,self.measure)
+
                         self.label_data.set( "% Humedad:")
                         self.label.pack()
 
 			self.hum_data.set(str(processed_data[0]))
 			#condition to set the humidity text and background color based oon "limit" variable
+
 			if (float(processed_data[0]) > limit):
 				self.humidity.configure(bg = 'red', foreground='yellow')
 			else:
-				color = "white"
-                                self.humidity.configure(bg = '#d9d9d9', foreground='black')
-                                self.humidity.pack()
+			        self.humidity.configure(bg = '#d9d9d9', foreground='black')
+
+                        self.humidity.pack()
 
                         self.temp_data.set("Temperatura: " + str(processed_data[1]) + " C")
                         self.temperature.pack()
                 
-		# Wait time in milliseconds between each measurement
-		self.after(10000,self.measure)
+
+		self.after(wait,self.measure)
 
 	# Create display elements
 	def createWidgets(self):
 
-                self.label = Label(self, textvariable=self.label_data, font=('Verdana', 40, 'bold'))
+                self.label = Label(self, textvariable=self.label_data, font=('Verdana', 70, 'bold'))
                 self.label.pack()
 		
-                self.humidity = Label(self, textvariable=self.hum_data,  font=('Verdana', 240, 'bold'))
+                self.humidity = Label(self, textvariable=self.hum_data,  font=('Verdana', 480, 'bold'))
 		self.humidity.pack()                
 
-                self.temperature = Label(self, textvariable=self.temp_data, font=('Verdana', 30))
+                self.temperature = Label(self, textvariable=self.temp_data, font=('Verdana',70, 'bold'))
                 self.temperature.pack()
 
 
